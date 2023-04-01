@@ -1,10 +1,24 @@
 import express from 'express'
+import dotenv from 'dotenv'
+import mongoose from 'mongoose'
 
+// CONFIGURATION
 const app = express()
-app.use('/', (req, res)=> {
-    res.send("pawpaw")
+dotenv.config()
+
+// MONGOOSE SETUP
+const URI = process.env.MONGODB_URI
+mongoose.connect(URI)
+    .then(() => { console.log('MongoDB connected') })
+    .catch((err) => { console.log('Error: ', err) })
+
+
+app.use('/', (req, res) => {
+    res.send("pawpaw cui")
 })
 
-app.listen(3001, () => {
-    console.log("Server connected")
+
+const PORT = process.env.PORT_SERVER
+app.listen(PORT, () => {
+    console.log(`Server connected to PORT: ${PORT}`)
 })
