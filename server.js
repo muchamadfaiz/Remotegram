@@ -20,7 +20,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 // ROUTES
-app.use('/api/user', userRoute)
+app.use('/api/users', userRoute)
 app.use('/api/auth', authRoute)
 
 

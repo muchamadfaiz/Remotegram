@@ -40,8 +40,11 @@ const login = async (req, res) => {
 
         // if everything OK show user
         const { password, ...info } = user._doc
+        console.log("Login Succesfull!!")
         res
-        .cookie("accessToken", token)
+        .cookie("accessToken", token, {
+            httponly: true,
+        })
         .status(200)
         .send(info)
     }
