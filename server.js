@@ -1,6 +1,8 @@
 import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
+import { userRoute } from './api/routes/user.route.js'
+
 
 // CONFIGURATION
 const app = express()
@@ -13,9 +15,7 @@ mongoose.connect(URI)
     .catch((err) => { console.log('Error: ', err) })
 
 
-app.use('/', (req, res) => {
-    res.send("pawpaw cui")
-})
+app.use('/api/user', userRoute)
 
 
 const PORT = process.env.PORT_SERVER
