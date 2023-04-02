@@ -14,7 +14,10 @@ mongoose.connect(URI)
     .then(() => { console.log('MongoDB connected') })
     .catch((err) => { console.log('Error: ', err) })
 
+// MIDLEWARES
+app.use(express.json())
 
+// ROUTES
 app.use('/api/user', userRoute)
 app.use('/api/auth', authRoute)
 
