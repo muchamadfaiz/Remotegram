@@ -3,7 +3,7 @@
 // }
 
 const deleteUser = (req, res) => {
-    res.send('test aja')
+    res.send('from controller')
 }
 
 export {deleteUser}
