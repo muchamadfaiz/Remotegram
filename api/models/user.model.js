@@ -13,9 +13,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    email:{
-        type:String,
-        required:true
+    email: {
+        type: String,
+        required: true
+    },
+    isSeller: {
+        type: Boolean,
+        default: false,
     }
 },
     { timestamps: true }

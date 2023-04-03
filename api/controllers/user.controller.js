@@ -4,7 +4,7 @@ import { createError } from "../utils/createError.js"
 const deleteUser = async (req, res, next) => {
     // is the token exist?
     // const { accesToken } = req.cookies
-    const user = await User.findById(req.params.id)
+    const user = await User.findById(req.params.id) // params is -> /:id
     // console.log(`token :${token}`)
     console.log(`req.userId dari user.con : ${req.userId}`)
     console.log(`user._id dari user.con : ${user._id.toString()}`)

@@ -36,12 +36,13 @@ const login = async (req, res, next) => {
         // create Token
         const token = jwt.sign({
            id: user._id,
-           email: user.email
+           email: user.email,
+           isSeller: user.isSeller
         }, process.env.JWT_KEY, {expiresIn: '60s'})
 
         // if everything OK show user
         const { password, ...info } = user._doc
-        console.log("Login Succesfull!!")
+        console.log(`Login Succesfull!! as ${username}`)
         res
         .cookie("accessToken", token, {
             httponly: true,
