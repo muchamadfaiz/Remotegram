@@ -4,21 +4,20 @@ import jwt from "jsonwebtoken"
 const deleteUser = async (req, res) => {
     // is the token exist?
     // const { accesToken } = req.cookies
-    const token = req.cookies.accessToken
     const user = await User.findById(req.params.id)
     // console.log(`token :${token}`)
-    if(!token) return res.status(401).json({status:"eror", message:"You are not log in"})
+    console.log(`req.userId dari user.con : ${req.userId}`)
+    console.log(`user._id dari user.con : ${user._id.toString()}`)
+    // console.log(user._id.toString())
 
-    jwt.verify(token, process.env.JWT_KEY, async (err, payload ) => {
-        // res.send(payload)
-        if(payload.id !== user._id.toString()){
-            return res.status(403).send("You can delete only your account!")
-        }
-        const { id } = req.params
-        await User.findByIdAndDelete(id)
-        res.status(200).send('deleted sucesfull')
-    })
+    if(req.userId !== user._id.toString()){
+        return res.status(403).send("You can delete only your account!")
+    }
+    const { id } = req.params
+    await User.findByIdAndDelete(id)
+    res.status(200).send('deleted sucesfull')
+    }
 
-}
+
 
 export { deleteUser }

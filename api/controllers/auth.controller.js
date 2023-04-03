@@ -13,6 +13,7 @@ const register = async (req, res) => {
         const result = await user.save()
         res.status(201).json({ status: "success", message: "berhasil dibuat" })
         console.log(result)
+        console.log(req.UserId)
     } catch (err) {
         console.log('Error: ', err.message)
         res.status(500).json({ status: "error", message: err.message })
