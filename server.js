@@ -4,6 +4,7 @@ import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
 import { userRoute } from './api/routes/user.route.js'
 import { authRoute } from './api/routes/auth.route.js'
+import { verifyToken } from './api/middlewares/jwt.js'
 
 // CONFIGURATION
 const app = express()
@@ -20,7 +21,7 @@ app.use(express.json())
 app.use(cookieParser())
 
 // ROUTES
-app.use('/api/users', userRoute)
+app.use('/api/users', verifyToken, userRoute)
 app.use('/api/auth', authRoute)
 
 

@@ -13,7 +13,6 @@ const register = async (req, res) => {
         const result = await user.save()
         res.status(201).json({ status: "success", message: "berhasil dibuat" })
         console.log(result)
-        console.log(req.UserId)
     } catch (err) {
         console.log('Error: ', err.message)
         res.status(500).json({ status: "error", message: err.message })
@@ -37,7 +36,7 @@ const login = async (req, res) => {
         const token = jwt.sign({
            id: user._id,
            email: user.email
-        }, process.env.JWT_KEY)
+        }, process.env.JWT_KEY, {expiresIn: '60s'})
 
         // if everything OK show user
         const { password, ...info } = user._doc

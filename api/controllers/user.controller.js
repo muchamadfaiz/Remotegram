@@ -10,6 +10,7 @@ const deleteUser = async (req, res) => {
     console.log(`user._id dari user.con : ${user._id.toString()}`)
     // console.log(user._id.toString())
 
+    // Input new object -> key=userId : value=user._id.toString()
     if(req.userId !== user._id.toString()){
         return res.status(403).send("You can delete only your account!")
     }
