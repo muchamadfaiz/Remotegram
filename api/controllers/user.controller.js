@@ -1,7 +1,7 @@
 import { User } from "../models/user.model.js"
-import jwt from "jsonwebtoken"
+import { createError } from "../utils/createError.js"
 
-const deleteUser = async (req, res) => {
+const deleteUser = async (req, res, next) => {
     // is the token exist?
     // const { accesToken } = req.cookies
     const user = await User.findById(req.params.id)
@@ -12,7 +12,7 @@ const deleteUser = async (req, res) => {
 
     // Input new object -> key=userId : value=user._id.toString()
     if(req.userId !== user._id.toString()){
-        return res.status(403).send("You can delete only your account!")
+        return next(createError(403, "You can delete only your account!"))
     }
     const { id } = req.params
     await User.findByIdAndDelete(id)

@@ -24,6 +24,12 @@ app.use(cookieParser())
 app.use('/api/users', verifyToken, userRoute)
 app.use('/api/auth', authRoute)
 
+app.use((err,req,res,next)=>{
+    const errorStatus = err.status || 500
+    const errorMessage = err.message || "Something went wrong"
+
+    return res.status(errorStatus).send(errorMessage)
+})
 
 const PORT = process.env.PORT_SERVER
 app.listen(PORT, () => {

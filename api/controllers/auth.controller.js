@@ -1,8 +1,9 @@
 import { User } from '../models/user.model.js'
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
+import { createError } from '../utils/createError.js'
 
-const register = async (req, res) => {
+const register = async (req, res, next) => {
     try {
         const { password } = req.body
         const hashedPassword = bcrypt.hashSync(password, 5)
@@ -14,23 +15,23 @@ const register = async (req, res) => {
         res.status(201).json({ status: "success", message: "berhasil dibuat" })
         console.log(result)
     } catch (err) {
-        console.log('Error: ', err.message)
-        res.status(500).json({ status: "error", message: err.message })
+        next(err)
     }
 }
 
-const login = async (req, res) => {
+const login = async (req, res, next) => {
     try {
         // Take password in DB and store it into variable
         const { username } = req.body
         const user = await User.findOne({ username })
 
         // check user
-        if (!user) return res.status(404).json({ status: "error", message: "User not found" })
+
+        if (!user) return next(createError(404,"User is not found!"))
 
         // comparing password in DB with client
         const isCorrect = bcrypt.compareSync(req.body.password, user.password)
-        if (!isCorrect) return res.status(400).json({ status: "error", message: "wrong password or username" })
+        if (!isCorrect) return next(createError(400, "Wrong password or username"))
 
         // create Token
         const token = jwt.sign({
@@ -50,8 +51,12 @@ const login = async (req, res) => {
     }
     catch (err) {
         // console.log("Error: ", err)
-        res.status(500).json({ status: "error", message: err.message })
+        next(err)
     }
 }
 
-export { register, login }
+const logout = (req, res) => {
+    res.clearCookie("accessToken")
+    .status(200).send("User has been logged Out!")
+}
+export { register, login, logout }
