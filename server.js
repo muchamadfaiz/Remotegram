@@ -2,7 +2,6 @@ import express from 'express'
 import dotenv from 'dotenv'
 import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
-import { verifyToken } from './api/middlewares/jwt.js'
 import { userRoute } from './api/routes/user.route.js'
 import { authRoute } from './api/routes/auth.route.js'
 import { gigRoute } from "./api/routes/gig.route.js"
@@ -22,9 +21,9 @@ app.use(express.json())
 app.use(cookieParser())
 
 // ROUTES
-app.use('/api/users', verifyToken, userRoute)
-app.use('/api/auth', authRoute)
-app.use('/api/gigs', verifyToken, gigRoute)
+app.use('/api', authRoute)
+app.use('/api', userRoute)
+app.use('/api', gigRoute)
 
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500

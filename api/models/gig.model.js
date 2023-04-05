@@ -2,7 +2,7 @@ import mongoose from "mongoose"
 
 // Creating Schema
 const gigSchema = new mongoose.Schema({
-    userID: {
+    userId: {
         type: String,
         required: true
     },
