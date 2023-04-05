@@ -2,9 +2,13 @@ import mongoose from "mongoose"
 
 // Creating Schema
 const gigSchema = new mongoose.Schema({
+    userID: {
+        type: String,
+        required: true
+    },
     title: {
         type: String,
-        required: trusted
+        required: true
     },
     description: {
         type: String,
@@ -14,7 +18,7 @@ const gigSchema = new mongoose.Schema({
         type: Number,
         required: true
     }
-},{timestamps:true})
+},{timestamps:true}) //option in Schema
 
 // Compiling model
 const Gig = mongoose.model('Gig', gigSchema)

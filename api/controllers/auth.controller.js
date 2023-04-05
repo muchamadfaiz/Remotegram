@@ -38,7 +38,7 @@ const login = async (req, res, next) => {
            id: user._id,
            email: user.email,
            isSeller: user.isSeller
-        }, process.env.JWT_KEY, {expiresIn: '60s'})
+        }, process.env.JWT_KEY, {expiresIn: '1d'})
 
         // if everything OK show user
         const { password, ...info } = user._doc

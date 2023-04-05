@@ -8,6 +8,7 @@ const deleteUser = async (req, res, next) => {
     // console.log(`token :${token}`)
     console.log(`req.userId dari user.con : ${req.userId}`)
     console.log(`user._id dari user.con : ${user._id.toString()}`)
+    console.log(`req.userID: ${req.userId}`)
     // console.log(user._id.toString())
 
     // Input new object -> key=userId : value=user._id.toString()
