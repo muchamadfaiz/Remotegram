@@ -3,13 +3,14 @@ import { createError } from "../utils/createError.js"
 
 const createGig = async (req, res, next) => {
     console.log(req.isSeller)
-    console.log(`req.userId dari gig.con : ${req.userId}`)
+    console.log(`req.user_id dari gig.con : ${req.user_id}`)
     try {
         if (!req.isSeller) {
             return next(createError(403, "Only seller can create a gig!"))
         } else {
             const gig = new Gig({
-                userId: req.userId,
+                user_id: req.user_id,
+                username: req.username,
                 ...req.body,
             })
             const savedGig = await gig.save()
@@ -23,14 +24,14 @@ const createGig = async (req, res, next) => {
 const deleteGig = async (req, res, next) => {
     try {
         // query document yg sama dengan params.id
-        console.log(`ini userId ${req.userId}`)
+        console.log(`ini userId ${req.user_id}`)
         console.log(`ini params ${req.params.id}`)
         const gigId = req.params.id
         const gig = await Gig.findById(gigId) //mengembalikan document sesuai id params
 
         console.log(gig)
 
-        if (req.userId !== gig.userId) {
+        if (req.user_id !== gig.user_id) {
             // // console.log(Gig.findById(req.UserId))
             // res.send("You can delete only your gig!")
             return next(createError(403, "You can delete only your gig!"))
@@ -73,7 +74,7 @@ const updateGig = async (req, res, next) => {
     const gig = await Gig.findById(gigId)
     const { title, description, price } = req.body
     try {
-        if (req.userId !== gig.userId) {
+        if (req.user_id !== gig.user_id) {
             return (next(createError(403, 'You can update only your gig!')))
         } else {
             const updatedgig = await Gig.findByIdAndUpdate(gigId, { title, description, price }, { new: true, runValidators: true })

@@ -21,34 +21,35 @@ const register = async (req, res, next) => {
 
 const login = async (req, res, next) => {
     try {
-        // Take password in DB and store it into variable
+        // search for username in DB and store it into variable
         const { username } = req.body
         const user = await User.findOne({ username })
 
         // check user
 
-        if (!user) return next(createError(404,"User is not found!"))
+        if (!user) return next(createError(404, "User is not found!"))
 
-        // comparing password in DB with client
+        // comparing password in DB and DB in client
         const isCorrect = bcrypt.compareSync(req.body.password, user.password)
         if (!isCorrect) return next(createError(400, "Wrong password or username"))
 
-        // create Token
+        // create payload and Token for using in authorization
         const token = jwt.sign({
-           id: user._id,
-           email: user.email,
-           isSeller: user.isSeller
-        }, process.env.JWT_KEY, {expiresIn: '1d'})
+            username: user.username,
+            id: user._id,
+            email: user.email,
+            isSeller: user.isSeller
+        }, process.env.JWT_KEY, { expiresIn: '1d' })
 
         // if everything OK show user
         const { password, ...info } = user._doc
         console.log(`Login Succesfull!! as ${username}`)
         res
-        .cookie("accessToken", token, {
-            httponly: true,
-        })
-        .status(200)
-        .send(info)
+            .cookie("accessToken", token, {
+                httponly: true,
+            })
+            .status(200)
+            .send(info)
     }
     catch (err) {
         // console.log("Error: ", err)
@@ -58,6 +59,6 @@ const login = async (req, res, next) => {
 
 const logout = (req, res) => {
     res.clearCookie("accessToken")
-    .status(200).send("User has been logged Out!")
+        .status(200).send("user has been logged Out!")
 }
 export { register, login, logout }

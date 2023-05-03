@@ -2,13 +2,17 @@ import mongoose from "mongoose"
 
 // Creating Schema
 const gigSchema = new mongoose.Schema({
-    userId: {
+    username: {
+        type: String,
+        required: true
+    },
+    user_id: {
         type: String,
         required: true
     },
     title: {
         type: String,
-        required: true
+        required: true,
     },
     description: {
         type: String,
@@ -18,7 +22,10 @@ const gigSchema = new mongoose.Schema({
         type: Number,
         required: true
     }
-},{timestamps:true}) //option in Schema
+},
+//option in Schema
+{timestamps:true}
+) 
 
 // Compiling model
 const Gig = mongoose.model('Gig', gigSchema)

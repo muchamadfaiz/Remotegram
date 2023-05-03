@@ -10,9 +10,10 @@ const verifyToken = (req, res, next) => {
         console.log(payload)
         console.log(`payload.id dari middleware: ${payload.id}`)
         console.log(`payload.isSeller dari middleware: ${payload.isSeller}`)
-        req.userId = payload.id
+        req.user_id = payload.id
         req.isSeller = payload.isSeller
-        console.log(`req.userId dari middleware: ${req.userId}`)
+        req.username = payload.username
+        console.log(`req.user_id dari middleware: ${req.user_id}`)
         next()
     })
 }
