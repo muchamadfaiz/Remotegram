@@ -1,38 +1,30 @@
 import express from 'express'
-import dotenv from 'dotenv'
-import mongoose from 'mongoose'
 import cookieParser from 'cookie-parser'
-import { userRoute } from './api/routes/user.route.js'
-import { authRoute } from './api/routes/auth.route.js'
-import { gigRoute } from "./api/routes/gig.route.js"
+import { PORT_SERVER } from './api/config/config.js'
+import { errorHandler } from './api/middlewares/error-handler.js'
+import { connectDB } from './api/db/db.js'
+import { setupRoutes } from './api/routes/routes.js'
+import morgan from 'morgan'
 
 // CONFIGURATION
 const app = express()
-dotenv.config()
+
+// LOGGING MIDDLEWARE
+app.use(morgan('dev'))
 
 // MONGOOSE SETUP
-const URI = process.env.MONGODB_URI
-mongoose.connect(URI)
-    .then(() => { console.log('MongoDB connected') })
-    .catch((err) => { console.log('Error: ', err) })
+connectDB(); // Menjalankan fungsi connectDB di sini
 
 // MIDLEWARES
 app.use(express.json())
 app.use(cookieParser())
 
 // ROUTES
-app.use('/api', authRoute)
-app.use('/api', userRoute)
-app.use('/api', gigRoute)
+setupRoutes(app)
 
-app.use((err, req, res, next) => {
-    const errorStatus = err.status || 500
-    const errorMessage = err.message || "Something went wrong"
+// ERROR MIDDLEWARE
+app.use(errorHandler)
 
-    return res.status(errorStatus).send(errorMessage)
-})
-
-const PORT = process.env.PORT_SERVER
-app.listen(PORT, () => {
-    console.log(`Server connected to PORT: ${PORT}`)
+app.listen(PORT_SERVER, () => {
+    console.log(`Server connected to PORT: ${PORT_SERVER}`)
 })

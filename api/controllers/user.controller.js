@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js"
 import { createError } from "../utils/createError.js"
+import { HTTP_STATUS } from "../utils/httpStatusCodes.js"
 
 const deleteUser = async (req, res, next) => {
     // is the token exist?
@@ -13,11 +14,11 @@ const deleteUser = async (req, res, next) => {
 
     // Input new object -> key=userId : value=user._id.toString()
     if(req.user_id !== user._id.toString()){
-        return next(createError(403, "You can delete only your account!"))
+        return next(createError(HTTP_STATUS.FORBIDDEN, "You can delete only your account!"))
     }
     const { id } = req.params
     await User.findByIdAndDelete(id)
-    res.status(200).send('deleted sucesfull')
+    res.status(HTTP_STATUS.OK).send('deleted sucesfull')
     }
 
 

@@ -2,6 +2,7 @@ import { User } from '../models/user.model.js'
 import bcrypt from "bcrypt"
 import jwt from 'jsonwebtoken'
 import { createError } from '../utils/createError.js'
+import { HTTP_STATUS } from '../utils/httpStatusCodes.js'
 
 const register = async (req, res, next) => {
     try {
@@ -12,7 +13,7 @@ const register = async (req, res, next) => {
             password: hashedPassword
         })
         const result = await user.save()
-        res.status(201).json({ status: "success", message: "berhasil dibuat" })
+        res.status(HTTP_STATUS.CREATED).json({ status: "success", message: "berhasil dibuat" })
         console.log(result)
     } catch (err) {
         next(err)
@@ -27,11 +28,11 @@ const login = async (req, res, next) => {
 
         // check user
 
-        if (!user) return next(createError(404, "User is not found!"))
+        if (!user) return next(createError(HTTP_STATUS.NOT_FOUND, "User is not found!"))
 
         // comparing password in DB and DB in client
         const isCorrect = bcrypt.compareSync(req.body.password, user.password)
-        if (!isCorrect) return next(createError(400, "Wrong password or username"))
+        if (!isCorrect) return next(createError(HTTP_STATUS.BAD_REQUEST, "Wrong password or username"))
 
         // create payload and Token for using in authorization
         const token = jwt.sign({
@@ -48,7 +49,7 @@ const login = async (req, res, next) => {
             .cookie("accessToken", token, {
                 httponly: true,
             })
-            .status(200)
+            .status(HTTP_STATUS.OK)
             .send(info)
     }
     catch (err) {
@@ -59,6 +60,6 @@ const login = async (req, res, next) => {
 
 const logout = (req, res) => {
     res.clearCookie("accessToken")
-        .status(200).send("user has been logged Out!")
+        .status(HTTP_STATUS.OK).send("user has been logged Out!")
 }
 export { register, login, logout }
